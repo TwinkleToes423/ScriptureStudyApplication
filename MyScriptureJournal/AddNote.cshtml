@@ -1,0 +1,61 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Add a Note";
+
+    Validation.RequireField("Book", "You must enter a book name");
+    Validation.RequireField("Chapter", "Chapter is required");
+    Validation.RequireField("Verse", "You haven't entered a verse");
+    Validation.RequireField("Note", "You must enter a note");
+
+    var book = "";
+    var chapter = "";
+    var verse = "";
+    var note = "";
+    var date = Convert.ToString(DateTime.Now);
+
+
+    if (IsPost)
+    {
+        if (Validation.IsValid())
+        {
+            book = Request.Form["book"];
+            chapter = Request.Form["chapter"];
+            verse = Request.Form["verse"];
+            note = Request.Form["note"];
+
+
+            var db = Database.Open("MyScriptureJournal");
+            var insertCommand = "INSERT INTO MyScriptureJournal (Book, Chapter, Verse, Note, Date) VALUES(@0, @1, @2, @3, @4)";
+            db.Execute(insertCommand, book, chapter, verse, note, date);
+
+            Response.Redirect("~/Notes");
+        }
+    }
+}
+<h2>Add a Note</h2>
+@Html.ValidationSummary()
+<form method="post">
+    <fieldset>
+        <legend>Note Information</legend>
+        <p>
+            <label for="book">Book:</label>
+            <input type="text" name="book" value="@Request.Form["book"]" />
+            @Html.ValidationMessage("book")
+
+        <p>
+            <label for="chapter">Chapter:</label>
+            <input type="text" name="chapter" value="@Request.Form["chapter"]" />
+            @Html.ValidationMessage("chapter")
+
+        <p>
+            <label for="verse">Verse:</label>
+            <input type="text" name="verse" value="@Request.Form["verse"]" />
+            @Html.ValidationMessage("verse")
+
+        <p>
+            <label for="note">Note:</label>
+            <input type="text" name="note" value="@Request.Form["note"]" />
+            @Html.ValidationMessage("note")
+
+        <p><input type="submit" name="buttonSubmit" value="Add Note" /></p>
+    </fieldset>

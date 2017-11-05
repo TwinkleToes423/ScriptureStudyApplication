@@ -1,0 +1,79 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Delete a Note";
+
+    var book = "";
+    var chapter = "";
+    var verse = "";
+    var note = "";
+    var myScriptureJournalId = "";
+
+    if (!IsPost)
+    {
+        if (!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].AsInt() > 0)
+        {
+            myScriptureJournalId = Request.QueryString["ID"];
+            var db = Database.Open("WebPagesMovies");
+            var dbCommand = "SELECT * FROM MyScriptureJournal WHERE ID = @0";
+            var row = db.QuerySingle(dbCommand, myScriptureJournalId);
+            if (row != null)
+            {
+                book = "";
+                chapter = "";
+                verse = "";
+                note = "";
+            }
+            else
+            {
+                Validation.AddFormError("No Note was found for that ID.");
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No Note was found for that ID.");
+        }
+    }
+
+    if (IsPost && !Request["buttonDelete"].IsEmpty())
+    {
+        myScriptureJournalId = Request.Form["myScriptureJournalId"];
+        var db = Database.Open("MyScriptureJournal");
+        var deleteCommand = "DELETE FROM MyScriptureJournal WHERE ID = @0";
+        db.Execute(deleteCommand, myScriptureJournalId);
+        Response.Redirect("~/Notes");
+    }
+
+}
+
+<h2>Delete a Note</h2>
+@Html.ValidationSummary()
+<p><a href="~/Notes">Return to notes</a></p>
+
+<form method="post">
+    <fieldset>
+        <legend>Movie Information</legend>
+
+        <p>
+            <span>Book:</span>
+            <span>@book</span>
+        </p>
+
+        <p>
+            <span>Chapter:</span>
+            <span>@chapter</span>
+        </p>
+
+        <p>
+            <span>Verse:</span>
+            <span>@verse</span>
+        </p>
+
+        <p>
+            <span>Note:</span>
+            <span>@note</span>
+        </p>
+
+        <input type="hidden" name="movieid" value="@myScriptureJournalId" />
+        <p><input type="submit" name="buttonDelete" value="Delete Note" /></p>
+    </fieldset>
+</form>
