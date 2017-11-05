@@ -14,7 +14,7 @@
 
     if (!Request.QueryString["searchNote"].IsEmpty())
     {
-        selectCommand = "SELECT * FROM MyScriptureJournal WHERE Note LIKE @0";
+        selectCommand = "SELECT * FROM MyScriptureJournal WHERE Note LIKE @0, @1, @2, @3, @4";
         searchTerm = "%" + Request.QueryString["searchNote"] + "%";
     }
 
