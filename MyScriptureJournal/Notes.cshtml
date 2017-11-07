@@ -14,7 +14,7 @@
 
     if (!Request.QueryString["searchNote"].IsEmpty())
     {
-        selectCommand = "SELECT * FROM MyScriptureJournal WHERE Note LIKE @0, @1, @2, @3, @4";
+        selectCommand = "SELECT * FROM MyScriptureJournal WHERE Note LIKE @0";
         searchTerm = "%" + Request.QueryString["searchNote"] + "%";
     }
 
@@ -34,7 +34,7 @@
 
         <div>
             <label for="SearchNote">Note that contains the following:</label>
-            <input type="text" name="searchNotes" value="@Request.QueryString["searchNote"]" />
+            <input type="text" name="searchNote" value="@Request.QueryString["searchNote"]" />
             <input type="Submit" value="Search keyword in notes" /><br />
         </div>
     </form>

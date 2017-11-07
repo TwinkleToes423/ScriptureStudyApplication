@@ -6,24 +6,24 @@
     var chapter = "";
     var verse = "";
     var note = "";
-    var myScriptureJournalId = "";
+    int myScriptureJournalId = 0;
 
     if (!IsPost)
     {
         if (!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
         {
-            myScriptureJournalId = Request.QueryString["ID"];
+            myScriptureJournalId = Request.QueryString["ID"].AsInt();
             var db = Database.Open("MyScriptureJournal");
             var dbCommand = "SELECT * FROM MyScriptureJournal WHERE ID = @0";
             var row = db.QuerySingle(dbCommand, myScriptureJournalId);
 
             if (row != null)
             {
-                book = "";
-                chapter = "";
-                verse = "";
-                note = "";
-                myScriptureJournalId = "";
+                book = row.Book;
+                chapter = row.Chapter;
+                verse = row.Verse;
+                note = row.Note;
+                myScriptureJournalId = row.Id;
             }
             else
             {
@@ -47,7 +47,7 @@
         chapter = Request.Form["chapter"];
         verse = Request.Form["verse"];
         note = Request.Form["note"];
-        myScriptureJournalId = Request.Form["myScriptureJournalId"];
+        myScriptureJournalId = Request.Form["myScriptureJournalId"].AsInt();
 
         if (Validation.IsValid())
         {
@@ -85,7 +85,7 @@
             <input type="text" name="note" value="@note" />
         </p>
 
-        <input type="hidden" name="myScriptureJournalid" value="@myScriptureJournalId" />
+        <input type="hidden" name="myScriptureJournalid" value="@myScriptureJournalId.ToString()" />
 
         <p><input type="submit" name="buttonSubmit" value="Submit Changes" /></p>
     </fieldset>
